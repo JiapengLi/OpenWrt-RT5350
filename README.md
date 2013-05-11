@@ -19,7 +19,7 @@ hlk-rm04-16m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 16M SDRAM ve
 hlk-rm04-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 32M SDRAM version only openwrt firmware)
 
 ###SDRAM###
-	Micron        32M     mT48LC16m16A2
+	Micron        32M     mT48LC16m16A2 
 	EtronTech     32M     EM63A165
 	ESMT          32M     M12L2561616A
 
