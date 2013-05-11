@@ -10,14 +10,19 @@ hame-mpr-a1-v22-uboot128.bin - （HAME Uboot support16MRAM, divide from hame-mpr
 
 uboot256.img - (RT5350 32M RAM Uboot，support 32M RAM)
 
-###说明###
-hame-mpr-a1-v22.bin - （hame-mpr-a1 4M原厂固件）
+openwrt-hlk-rm04-4m-16m-luci-usb-mjpg.bin - (HiLink HLK-RM04 4M openwrt bin file with uboot and other all things, 16M SDRAM version)
 
-hame-mpr-a1-v22-uboot128.bin - （HAME原厂固件Uboot提取支持16MRAM）
- 	
-mpr-a1-16m-luci-usb-mjpg.bin - (openwrt固件,16M RAM版本)
+openwrt-hlk-rm04-4m-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 4M openwrt bin file with uboot and other all things, 32M SDRAM version)
 
-mpr-a1-32m-luci-usb-mjpg.bin - (openwrt固件,32M RAM版本)
+hlk-rm04-16m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 16M SDRAM version only openwrt firmware)
 
-uboot256.img - (RT5350 32M RAM 版本Uboot，支持32M RAM)
+hlk-rm04-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 32M SDRAM version only openwrt firmware)
 
+###SDRAM###
+	Micron        32M     mT48LC16m16A2
+	EtronTech     32M     EM63A165
+	ESMT          32M     M12L2561616A
+
+###Note###
+
+LUCI runs very slowly with 16M SDRAM. Strongly recommend to upgrade the SDRAM to 32M
