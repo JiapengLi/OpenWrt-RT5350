@@ -19,6 +19,9 @@ hlk-rm04-16m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 16M SDRAM ve
 hlk-rm04-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 32M SDRAM version only openwrt firmware)
 
 ###SDRAM###
+
+If you want run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SDRAM to 32M, here is some available 32M SDRAM chips.
+
 	Micron        32M     mT48LC16m16A2 
 	EtronTech     32M     EM63A165
 	ESMT          32M     M12L2561616A
