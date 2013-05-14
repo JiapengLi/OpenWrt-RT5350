@@ -50,28 +50,28 @@ Use the tools(for Windows) in **tools/Hame** to upgrade Hame.
 **BE CAREFUL,THESE PROCEDURE IS NOT TESTED.**
 
 These tools from hame is in Chinese. Fortunately, however, it's very simple.
-	
-	-1.Close your Hame device, disconnect your Hame device with your PC.
-	
-	0.If your OS is WIN7, install **vcredist_x86.exe** first
-	
-	1.Set your IP address to **192.168.1.55**, sub-mask **255.255.255.0**, GateWay **NULL**
-	
-	2.Start up **OneKeyUpgrade.exe**, select your *OpenWrt bin file*.
-	
-	3.Checked the **"升级Root_uImage"**. 
-	
-	4.Click the **"启动"** button.
-	
-	5.Keep pressing the **Reset** button, and start your **Hame device**, you can see the blue LED long bright.
-	
-	6.Connect your Hame with your PC, connection can be created automatically, and upgrade starts.
-	
-	7.During the flashing, red LED is always lighting. After Hame device have been flashed, it will restart automatically.
-	
-	8.After all things, you can see a dialog with these strings **"设备写入完成，可以移除"** is popped up. This means you are successful.
-	
-	**9.WARNING: because my hame MPR-A1 has been flashed to OpenWrt, so i don't test it.**
+
+-1.Close your Hame device, disconnect your Hame device with your PC.
+
+0.If your OS is WIN7, install **vcredist_x86.exe** first
+
+1.Set your IP address to **192.168.1.55**, sub-mask **255.255.255.0**, GateWay **NULL**
+
+2.Start up **OneKeyUpgrade.exe**, select your *OpenWrt bin file*.
+
+3.Checked the **"升级Root_uImage"**. 
+
+4.Click the **"启动"** button.
+
+5.Keep pressing the **Reset** button, and start your **Hame device**, you can see the blue LED long bright.
+
+6.Connect your Hame with your PC, connection can be created automatically, and upgrade starts.
+
+7.During the flashing, red LED is always lighting. After Hame device have been flashed, it will restart automatically.
+
+8.After all things, you can see a dialog with these strings **"设备写入完成，可以移除"** is popped up. This means you are successful.
+
+**9.WARNING: because my hame MPR-A1 has been flashed to OpenWrt, so i don't test it.**
 
 *Last, if someone has tested this, please feed me back no matter failed or successful. *
 
