@@ -2,6 +2,12 @@
 
 These bins were compiled under trunk reversion 35407, MPR-A1 files was compiled by using [Squonk42's RT5350 patch](https://github.com/Squonk42/OpenWrt-RT5350?source=cc). ***LUCI runs very slowly on 16M SDRAM hardware.***
 
+	mpr-a1 related bins are in **mpr-a1**.
+	
+	hlk-rm04 relate bins are in **hlk-rm04**
+	
+	**u-boot** contains the RT5350 u-boot image.
+
 mpr-a1-16m-luci-usb-mjpg.bin - (openwrt firmware,16M RAM)
 
 mpr-a1-32m-luci-usb-mjpg.bin - (openwrt firmware,32M RAM)
@@ -44,7 +50,7 @@ If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SD
 [Squonk42's RT5350](https://github.com/Squonk42/OpenWrt-RT5350?source=cc)
 
 ###How To###
-#####Possible way to flash MPR-A1 (without using serial)#####
+####Possible way to flash MPR-A1 (without using serial)####
 Use the tools(for Windows) in **tools/Hame** to upgrade Hame. 
 
 **BE CAREFUL,THESE PROCEDURE IS NOT TESTED.**
