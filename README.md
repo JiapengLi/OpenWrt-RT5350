@@ -1,5 +1,7 @@
 ###Details###
 
+These bins were compiled under trunk reversion 35407, MPR-A1 files was compiled by using [Squonk42's RT5350 patch](https://github.com/Squonk42/OpenWrt-RT5350?source=cc). ***LUCI runs very slowly on 16M SDRAM hardware.***
+
 mpr-a1-16m-luci-usb-mjpg.bin - (openwrt firmware,16M RAM)
 
 mpr-a1-32m-luci-usb-mjpg.bin - (openwrt firmware,32M RAM)
@@ -20,7 +22,7 @@ hlk-rm04-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 32M SDRAM ve
 
 ###SDRAM###
 
-If you want run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SDRAM to 32M, here is some available 32M SDRAM chips.
+If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SDRAM to 32M, here is some available 32M SDRAM chips.
 
 	Micron        32M     mT48LC16m16A2 
 	EtronTech     32M     EM63A165
@@ -42,6 +44,36 @@ If you want run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SDRAM
 [Squonk42's RT5350](https://github.com/Squonk42/OpenWrt-RT5350?source=cc)
 
 ###How To###
+#####Possible way to flash MPR-A1 (without using serial)#####
+Use the tools(for Windows) in **tools/Hame** to upgrade Hame. 
+
+**BE CAREFUL,THESE PROCEDURE IS NOT TESTED.**
+
+These tools from hame is in Chinese. Fortunately, however, it's very simple.
+
+-1.Close your Hame device, disconnect your Hame device with your PC.
+
+0.If your OS is WIN7, install **vcredist_x86.exe** first
+
+1.Set your IP address to **192.168.1.55**, sub-mask **255.255.255.0**, GateWay **NULL**
+
+2.Start up **OneKeyUpgrade.exe**, select your *OpenWrt bin file*.
+
+3.Checked the **"升级Root_uImage"**. 
+
+4.Click the **"启动"** button.
+
+5.Keep pressing the **Reset** button, and start your **Hame device**, you can see the blue LED long bright.
+
+6.Connect your Hame with your PC, connection can be created automatically, and upgrade starts.
+
+7.During the flashing, red LED is always lighting. After Hame device have been flashed, it will restart automatically.
+
+8.After all things, you can see a dialog with these strings **"设备写入完成，可以移除"** is popped up. This means you are successful.
+
+**9.WARNING: because my hame MPR-A1 has been flashed to OpenWrt, so i don't test it.**
+
+*Last, if someone has tested this, please feed me back no matter failed or successful. *
 
 ###Note###
 
