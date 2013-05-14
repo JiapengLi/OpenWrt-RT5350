@@ -75,6 +75,8 @@ These tools from hame is in Chinese. Fortunately, however, it's very simple.
 
 *Last, if someone has tested this, please feed me back no matter failed or successful. *
 
+Thank [xajialuo](http://www.right.com.cn/forum/space-uid-81425.html) from [恩山wifi论坛](http://www.right.com.cn/forum/forum.php) for finding these tools. 
+
 ###Note###
 
 LUCI runs very slowly with 16M SDRAM. Strongly recommend to upgrade the SDRAM to 32M
