@@ -73,7 +73,7 @@ These tools from hame is in Chinese. Fortunately, however, it's very simple.
 
 **9.WARNING: because my hame MPR-A1 has been flashed to OpenWrt, so i don't test it.**
 
-*Last, if someone has tested this, please feed me back no matter failed or successful. *
+*Last, if someone has tested this, please feed me back no matter failed or successful.*
 
 Thank [xajialuo](http://www.right.com.cn/forum/space-uid-81425.html) from [恩山wifi论坛](http://www.right.com.cn/forum/forum.php) for finding these tools. 
 
