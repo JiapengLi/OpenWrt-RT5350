@@ -12,7 +12,10 @@ mpr-a1-16m-luci-usb-mjpg.bin - (openwrt firmware,16M RAM)
 
 mpr-a1-32m-luci-usb-mjpg.bin - (openwrt firmware,32M RAM)
 
-hame-mpr-a1-v22.bin - （hame-mpr-a1 4M Hame origin firmware）
+hame-mpr-a1-v22.bin - （hame-mpr-a1 4M Hame origin firmware）  
+*MAC: 9C417CE21C58  
+WIFI NAME: HAME_A1_21C5  
+WIFI PASSWORD: 7ce21c58*  
 
 hame-mpr-a1-v22-uboot128.bin - （HAME Uboot support16MRAM, divide from hame-mpr-a1-v22.bin） 
 
