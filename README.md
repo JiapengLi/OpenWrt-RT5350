@@ -1,4 +1,4 @@
-###Details###
+##Details##
 
 These bins were compiled under trunk reversion 35407, MPR-A1 files was compiled by using [Squonk42's RT5350 patch](https://github.com/Squonk42/OpenWrt-RT5350?source=cc). ***LUCI runs very slowly on 16M SDRAM hardware.***
 
@@ -29,7 +29,7 @@ hlk-rm04-16m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 16M SDRAM ve
 
 hlk-rm04-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 32M SDRAM version only openwrt firmware)
 
-###SDRAM###
+### SDRAM
 
 If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SDRAM to 32M, here is some available 32M SDRAM chips.
 
@@ -37,22 +37,36 @@ If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SD
 	EtronTech     32M     EM63A165
 	ESMT          32M     M12L2561616A
 
-###RESOURCE###
+### RESOURCE
 
-#####WIKI#####
+#### WIKI
 [Hame MPR-A1](http://wiki.openwrt.org/toh/hame/mpr-a1)
 
 [HiLink HLK-RM04](http://wiki.openwrt.org/toh/hilink/hlk-rm04)
 
-#####Forum#####
+#### Forum
 [Hi-Link wireless module HLK-RM04](https://forum.openwrt.org/viewtopic.php?id=42142)
 
 [HAME MPR-A1 - Small and cheap router with built-in battery](https://forum.openwrt.org/viewtopic.php?id=37002)
 
-#####OTHERS#####
+#### OTHERS
 [Squonk42's RT5350](https://github.com/Squonk42/OpenWrt-RT5350?source=cc)
 
-###How To###
+## PATCH
+Usage:  
+
+	mkdir openwrt
+	cd openwrt
+	svn co svn://svn.openwrt.org/openwrt/trunk
+	git clone https://github.com/Squonk42/OpenWrt-RT5350.git
+	cd trunk
+	patch -p0 <../OpenWrt-RT5350/openwrt_add_pm25lq032_flash_support.patch
+	patch -p0 <../OpenWrt-RT5350/openwrt_add_rt5350_wlan_support.patch
+	patch -p0 <../OpenWrt-RT5350/openwrt_hame_mpr-a1.patch
+	make menuconfig
+
+
+## How To
 ####Possible way to flash MPR-A1 (without using serial)####
 Use the tools(for Windows) in **tools/Hame** to upgrade Hame. 
 
@@ -86,6 +100,6 @@ These tools from hame is in Chinese. Fortunately, however, it's very simple.
 
 Thank [xajialuo](http://www.right.com.cn/forum/space-uid-81425.html) from [恩山wifi论坛](http://www.right.com.cn/forum/forum.php) for finding these tools. 
 
-###Note###
+## Note
 
 LUCI runs very slowly with 16M SDRAM. Strongly recommend to upgrade the SDRAM to 32M
