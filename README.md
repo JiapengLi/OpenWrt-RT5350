@@ -53,18 +53,25 @@ If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SD
 [Squonk42's RT5350](https://github.com/Squonk42/OpenWrt-RT5350?source=cc)
 
 ## PATCH
+This patch is based on [Squonk42's RT5350 Patch](https://github.com/Squonk42/OpenWrt-RT5350?source=cc), and also it doesn't support the current trunk version, test with version 35407.
+
 Usage:  
 
 	mkdir openwrt
 	cd openwrt
-	svn co svn://svn.openwrt.org/openwrt/trunk
-	git clone https://github.com/Squonk42/OpenWrt-RT5350.git
+	svn co svn://svn.openwrt.org/openwrt/trunk@35407 trunk
+	git clone https://github.com/JiapengLi/OpenWrt-RT5350.git
 	cd trunk
-	patch -p0 <../OpenWrt-RT5350/openwrt_add_pm25lq032_flash_support.patch
-	patch -p0 <../OpenWrt-RT5350/openwrt_add_rt5350_wlan_support.patch
-	patch -p0 <../OpenWrt-RT5350/openwrt_hame_mpr-a1.patch
+	patch -p0 <../OpenWrt-RT5350/openwrt-hame-mpr-a1_hilink-hlk-rm04.patch
 	make menuconfig
 
+Note:
+If you can't see hlk-rm04 option, please try to clear `tmp` folder, and `make menuconfig` again.
+	
+	cd trunk
+	rm -rf tmp
+
+Contact me if you need help.[gapleehit@gmail.com](mailto:gapleehit@gmail.com)
 
 ## How To
 ####Possible way to flash MPR-A1 (without using serial)####
