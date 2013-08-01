@@ -58,10 +58,11 @@ If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SD
 #### OTHERS
 [Squonk42's RT5350](https://github.com/Squonk42/OpenWrt-RT5350?source=cc)
 
-## PATCH
-This patch is based on [Squonk42's RT5350 Patch](https://github.com/Squonk42/OpenWrt-RT5350?source=cc), include **HiLink HLK-RM04** and **Hame MPR-A1**, and also it doesn't support the current trunk version, only test with version 35407.
-Patch include mpr-a1, hlk-rm04, flash and wlan.
-Now you only need this one patch to compile openwrt for hlk-rm04. 
+## PATCH for HLK-RM04
+This patch is based on [Squonk42's RT5350 Patch](https://github.com/Squonk42/OpenWrt-RT5350?source=cc), include **HiLink HLK-RM04** and **Hame MPR-A1**, and also it doesn't support the current trunk version, only test with version 35407.  
+Patch include mpr-a1, hlk-rm04, flash and wlan.  
+Now you only need this one patch to compile openwrt for hlk-rm04.  
+**Note: this patch is a temporary solution, the dts structure patch for hlk-rm04 is on the way, when the serial bug(about uartf) is fixed, i'll publise it here.**
 
 Usage:  
 
