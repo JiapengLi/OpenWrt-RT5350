@@ -17,10 +17,6 @@ hame-mpr-a1-v22.bin - （hame-mpr-a1 4M Hame origin firmware）
 WIFI NAME: HAME_A1_21C5  
 WIFI PASSWORD: 7ce21c58*  
 
-hame-mpr-a1-v22-uboot128.bin - （HAME Uboot support16MRAM, divide from hame-mpr-a1-v22.bin） 
-
-uboot256.img - (RT5350 32M RAM Uboot，support 32M RAM)
-
 openwrt-hlk-rm04-4m-16m-luci-usb-mjpg.bin - (HiLink HLK-RM04 4M openwrt bin file with uboot and other all things, 16M SDRAM version)
 
 openwrt-hlk-rm04-4m-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 4M openwrt bin file with uboot and other all things, 32M SDRAM version)
@@ -28,6 +24,15 @@ openwrt-hlk-rm04-4m-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 4M openwrt bin file
 hlk-rm04-16m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 16M SDRAM version only openwrt firmware)
 
 hlk-rm04-32m-luci-usb-mjpg.bin - (HiLink HLK-RM04 openwrt bin file, 32M SDRAM version only openwrt firmware)
+
+## Uboot
+### Self compile uboot image
+These two file use 192.168.2.1(device ip) and 192.168.2.2(server ip) by default.  
+uboot256.img - (RT5350 32M RAM Uboot，support 32M SDRAM)  
+uboot128.img - (RT5350 16M RAM Uboot，support 16M SDRAM)  
+### Hame offcial mpr-a1 uboot image
+hame-mpr-a1-v22-uboot128.bin - （HAME Uboot support 16MRAM, divide from hame-mpr-a1-v22.bin） 
+
 
 ### SDRAM
 
