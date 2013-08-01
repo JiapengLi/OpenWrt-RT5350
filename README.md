@@ -36,6 +36,7 @@ If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SD
 	Micron        32M     mT48LC16m16A2 
 	EtronTech     32M     EM63A165
 	ESMT          32M     M12L2561616A
+	Samsung  	  32M     K4S561632E
 
 ### RESOURCE
 

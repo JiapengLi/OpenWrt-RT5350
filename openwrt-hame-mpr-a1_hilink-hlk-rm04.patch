@@ -10,19 +10,153 @@ Index: feeds.conf.default
  #src-svn phone svn://svn.openwrt.org/openwrt/feeds/phone
  #src-svn efl svn://svn.openwrt.org/openwrt/feeds/efl
  #src-svn xorg svn://svn.openwrt.org/openwrt/feeds/xorg
-Index: target/linux/ar71xx/config-3.7
+Index: target/linux/ramips/rt305x/profiles/hame.mk
 ===================================================================
---- target/linux/ar71xx/config-3.7	(revision 35407)
-+++ target/linux/ar71xx/config-3.7	(working copy)
-@@ -98,7 +98,7 @@
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
- CONFIG_CEVT_R4K=y
- CONFIG_CEVT_R4K_LIB=y
--CONFIG_CMDLINE="rootfstype=squashfs,yaffs,jffs2 noinitrd"
-+CONFIG_CMDLINE="rootfstype=squashfs,yaffs,jffs2 noinitrd mem=32M"
- CONFIG_CMDLINE_BOOL=y
- # CONFIG_CMDLINE_OVERRIDE is not set
- CONFIG_CPU_BIG_ENDIAN=y
+--- target/linux/ramips/rt305x/profiles/hame.mk	(revision 0)
++++ target/linux/ramips/rt305x/profiles/hame.mk	(working copy)
+@@ -0,0 +1,17 @@
++#
++# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
++#
++# This is free software, licensed under the GNU General Public License v2.
++# See /LICENSE for more information.
++#
++
++define Profile/MPR_A1
++	NAME:=HAME MPR-A1
++	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
++endef
++
++define Profile/MPR_A1/Description
++	Package set for HAME MPR-A1 board
++endef
++
++$(eval $(call Profile,MPR_A1))
+Index: target/linux/ramips/rt305x/profiles/hilink.mk
+===================================================================
+--- target/linux/ramips/rt305x/profiles/hilink.mk	(revision 0)
++++ target/linux/ramips/rt305x/profiles/hilink.mk	(working copy)
+@@ -0,0 +1,17 @@
++#
++# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
++#
++# This is free software, licensed under the GNU General Public License v2.
++# See /LICENSE for more information.
++#
++
++define Profile/HLK_RM04
++	NAME:=HILINK HLK-RM04
++	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
++endef
++
++define Profile/HLK_RM04/Description
++	Package set for HILINK HLK-RM04 board
++endef
++
++$(eval $(call Profile,HLK_RM04))
+Index: target/linux/ramips/base-files/lib/upgrade/platform.sh
+===================================================================
+--- target/linux/ramips/base-files/lib/upgrade/platform.sh	(revision 35407)
++++ target/linux/ramips/base-files/lib/upgrade/platform.sh	(working copy)
+@@ -36,6 +36,8 @@
+ 	freestation5 | \
+ 	hw550-3g | \
+ 	mofi3500-3gn | \
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	mzk-w300nh2 | \
+ 	nbg-419n | \
+ 	nw718 | \
+Index: target/linux/ramips/base-files/lib/preinit/06_set_iface_mac
+===================================================================
+--- target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(revision 35407)
++++ target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(working copy)
+@@ -21,6 +21,8 @@
+ 	dir-620-a1 |\
+ 	esr-9753 |\
+ 	freestation5 |\
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	nw718 |\
+ 	psr-680w |\
+ 	rt-n56u |\
+Index: target/linux/ramips/base-files/lib/ramips.sh
+===================================================================
+--- target/linux/ramips/base-files/lib/ramips.sh	(revision 35407)
++++ target/linux/ramips/base-files/lib/ramips.sh	(working copy)
+@@ -128,6 +128,12 @@
+ 	*"MoFi Network MOFI3500-3GN")
+ 		name="mofi3500-3gn"
+ 		;;
++	*"MPR-A1")
++ 		name="mpr-a1"
++ 		;;
++	*"HLK-RM04")
++ 		name="hlk-rm04"
++ 		;;
+ 	*"NBG-419N")
+ 		name="nbg-419n"
+ 		;;
+Index: target/linux/ramips/base-files/etc/diag.sh
+===================================================================
+--- target/linux/ramips/base-files/etc/diag.sh	(revision 35407)
++++ target/linux/ramips/base-files/etc/diag.sh	(working copy)
+@@ -70,6 +70,12 @@
+ 	mofi3500-3gn)
+ 		status_led="mofi3500-3gn:green:status"
+ 		;;
++	mpr-a1)
++		status_led="mpr-a1:red:power"
++		;;
++	hlk-rm04)
++		status_led="hlk-rm04:red:power"
++		;;
+ 	nbg-419n)
+ 		status_led="nbg-419n:green:power"
+ 		;;
+Index: target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom
+===================================================================
+--- target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(revision 35407)
++++ target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(working copy)
+@@ -70,6 +70,8 @@
+ 	freestation5 | \
+ 	hw550-3g | \
+ 	mofi3500-3gn | \
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	pwh2004 | \
+ 	nbg-419n | \
+ 	nw718 | \
+Index: target/linux/ramips/base-files/etc/uci-defaults/01_leds
+===================================================================
+--- target/linux/ramips/base-files/etc/uci-defaults/01_leds	(revision 35407)
++++ target/linux/ramips/base-files/etc/uci-defaults/01_leds	(working copy)
+@@ -78,6 +78,12 @@
+ 	mzk-w300nh2)
+ 		set_wifi_led "mzkw300nh2:amber:wlan"
+ 		;;
++	mpr-a1)
++		set_wifi_led "mpr-a1:blue:system"
++		;;
++	hlk-rm04)
++		set_wifi_led "hlk-rm04:blue:system"
++		;;
+ 	nw718)
+ 		set_usb_led "nw718:amber:usb"
+ 		;;
+Index: target/linux/ramips/base-files/etc/uci-defaults/02_network
+===================================================================
+--- target/linux/ramips/base-files/etc/uci-defaults/02_network	(revision 35407)
++++ target/linux/ramips/base-files/etc/uci-defaults/02_network	(working copy)
+@@ -156,6 +156,8 @@
+ 	bc2 | \
+ 	broadway | \
+ 	f5d8235-v1 | \
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	mzk-w300nh2 | \
+ 	nw718 | \
+ 	psr-680w | \
 Index: target/linux/ramips/image/Makefile
 ===================================================================
 --- target/linux/ramips/image/Makefile	(revision 35407)
@@ -51,17 +185,40 @@ Index: target/linux/ramips/image/Makefile
  	$(call Image/Build/Profile/MZKW3000NH2,$(1))
  	$(call Image/Build/Profile/NBG419N,$(1))
  	$(call Image/Build/Profile/NW718,$(1))
-Index: target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h
+Index: target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile
 ===================================================================
---- target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h	(revision 35407)
-+++ target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h	(working copy)
-@@ -82,4 +82,6 @@
+--- target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile	(revision 35407)
++++ target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile	(working copy)
+@@ -30,6 +30,8 @@
+ obj-$(CONFIG_RT305X_MACH_FREESTATION5)  += mach-freestation5.o
+ obj-$(CONFIG_RT305X_MACH_HW550_3G)	+= mach-hw550-3g.o
+ obj-$(CONFIG_RT305X_MACH_MOFI3500_3GN)	+= mach-mofi3500-3gn.o
++obj-$(CONFIG_RT305X_MACH_MPR_A1)	+= mach-mpr-a1.o
++obj-$(CONFIG_RT305X_MACH_HLK_RM04)	+= mach-hlk-rm04.o
+ obj-$(CONFIG_RT305X_MACH_NBG_419N)	+= mach-nbg-419n.o
+ obj-$(CONFIG_RT305X_MACH_NW718)		+= mach-nw718.o
+ obj-$(CONFIG_RT305X_MACH_OMNI_EMB)	+= mach-omni-emb.o
+Index: target/linux/ramips/files/arch/mips/ralink/rt305x/Kconfig
+===================================================================
+--- target/linux/ramips/files/arch/mips/ralink/rt305x/Kconfig	(revision 35407)
++++ target/linux/ramips/files/arch/mips/ralink/rt305x/Kconfig	(working copy)
+@@ -124,6 +124,16 @@
+ 	select RALINK_DEV_GPIO_BUTTONS
+ 	select RALINK_DEV_GPIO_LEDS
  
- 	/* RT5350 based machines */
- 	RAMIPS_MACH_AIR3GII,		/* AirLive Air3GII */
-+	RAMIPS_MACH_MPR_A1,		/* HAME MPR-A1 */
-+	RAMIPS_MACH_HLK_RM04,		/* HILINK HLK-RM04*/
- };
++config RT305X_MACH_MPR_A1
++	bool "HAME MPR-A1 board support"
++	select RALINK_DEV_GPIO_BUTTONS
++	select RALINK_DEV_GPIO_LEDS
++
++config RT305X_MACH_HLK_RM04
++	bool "HILINK HLK-RM04 board support"
++	select RALINK_DEV_GPIO_BUTTONS
++	select RALINK_DEV_GPIO_LEDS
++
+ config RT305X_MACH_WR512_3GN
+ 	bool "SH-WR512NU/WS-WR512N1-like 3GN router"
+ 	select RALINK_DEV_GPIO_BUTTONS
 Index: target/linux/ramips/files/arch/mips/ralink/rt305x/mach-mpr-a1.c
 ===================================================================
 --- target/linux/ramips/files/arch/mips/ralink/rt305x/mach-mpr-a1.c	(revision 0)
@@ -292,228 +449,502 @@ Index: target/linux/ramips/files/arch/mips/ralink/rt305x/mach-hlk-rm04.c
 +
 +MIPS_MACHINE(RAMIPS_MACH_HLK_RM04, "HLK-RM04", "HILINK HLK-RM04",
 +             hlk_rm04_init);
-Index: target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile
+Index: target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h
 ===================================================================
---- target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile	(revision 35407)
-+++ target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile	(working copy)
-@@ -30,6 +30,8 @@
- obj-$(CONFIG_RT305X_MACH_FREESTATION5)  += mach-freestation5.o
- obj-$(CONFIG_RT305X_MACH_HW550_3G)	+= mach-hw550-3g.o
- obj-$(CONFIG_RT305X_MACH_MOFI3500_3GN)	+= mach-mofi3500-3gn.o
-+obj-$(CONFIG_RT305X_MACH_MPR_A1)	+= mach-mpr-a1.o
-+obj-$(CONFIG_RT305X_MACH_HLK_RM04)	+= mach-hlk-rm04.o
- obj-$(CONFIG_RT305X_MACH_NBG_419N)	+= mach-nbg-419n.o
- obj-$(CONFIG_RT305X_MACH_NW718)		+= mach-nw718.o
- obj-$(CONFIG_RT305X_MACH_OMNI_EMB)	+= mach-omni-emb.o
-Index: target/linux/ramips/files/arch/mips/ralink/rt305x/Kconfig
-===================================================================
---- target/linux/ramips/files/arch/mips/ralink/rt305x/Kconfig	(revision 35407)
-+++ target/linux/ramips/files/arch/mips/ralink/rt305x/Kconfig	(working copy)
-@@ -124,6 +124,16 @@
- 	select RALINK_DEV_GPIO_BUTTONS
- 	select RALINK_DEV_GPIO_LEDS
+--- target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h	(revision 35407)
++++ target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h	(working copy)
+@@ -82,4 +82,6 @@
  
-+config RT305X_MACH_MPR_A1
-+	bool "HAME MPR-A1 board support"
-+	select RALINK_DEV_GPIO_BUTTONS
-+	select RALINK_DEV_GPIO_LEDS
-+
-+config RT305X_MACH_HLK_RM04
-+	bool "HILINK HLK-RM04 board support"
-+	select RALINK_DEV_GPIO_BUTTONS
-+	select RALINK_DEV_GPIO_LEDS
-+
- config RT305X_MACH_WR512_3GN
- 	bool "SH-WR512NU/WS-WR512N1-like 3GN router"
- 	select RALINK_DEV_GPIO_BUTTONS
-Index: target/linux/ramips/rt305x/profiles/hame.mk
+ 	/* RT5350 based machines */
+ 	RAMIPS_MACH_AIR3GII,		/* AirLive Air3GII */
++	RAMIPS_MACH_MPR_A1,		/* HAME MPR-A1 */
++	RAMIPS_MACH_HLK_RM04,		/* HILINK HLK-RM04*/
+ };
+Index: target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch
 ===================================================================
---- target/linux/ramips/rt305x/profiles/hame.mk	(revision 0)
-+++ target/linux/ramips/rt305x/profiles/hame.mk	(working copy)
-@@ -0,0 +1,17 @@
-+#
-+# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
-+#
-+# This is free software, licensed under the GNU General Public License v2.
-+# See /LICENSE for more information.
-+#
-+
-+define Profile/MPR_A1
-+	NAME:=HAME MPR-A1
-+	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
-+endef
-+
-+define Profile/MPR_A1/Description
-+	Package set for HAME MPR-A1 board
-+endef
-+
-+$(eval $(call Profile,MPR_A1))
-Index: target/linux/ramips/rt305x/profiles/hilink.mk
+--- target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
++++ target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
+@@ -0,0 +1,10 @@
++--- a/drivers/mtd/devices/m25p80.c
+++++ b/drivers/mtd/devices/m25p80.c
++@@ -682,6 +682,7 @@
++ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
++ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
++ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
+++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
++ 
++ 	/* Spansion -- single (large) sector size only, at least
++ 	 * for the chips listed here (without boot sectors).
+Index: target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch
 ===================================================================
---- target/linux/ramips/rt305x/profiles/hilink.mk	(revision 0)
-+++ target/linux/ramips/rt305x/profiles/hilink.mk	(working copy)
-@@ -0,0 +1,17 @@
-+#
-+# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
-+#
-+# This is free software, licensed under the GNU General Public License v2.
-+# See /LICENSE for more information.
-+#
-+
-+define Profile/HLK_RM04
-+	NAME:=HILINK HLK-RM04
-+	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
-+endef
-+
-+define Profile/HLK_RM04/Description
-+	Package set for HILINK HLK-RM04 board
-+endef
-+
-+$(eval $(call Profile,HLK_RM04))
-Index: target/linux/ramips/rt305x/config-3.7
+--- target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
++++ target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
+@@ -0,0 +1,10 @@
++--- a/drivers/mtd/devices/m25p80.c
+++++ b/drivers/mtd/devices/m25p80.c
++@@ -682,6 +682,7 @@
++ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
++ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
++ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
+++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
++ 
++ 	/* Spansion -- single (large) sector size only, at least
++ 	 * for the chips listed here (without boot sectors).
+Index: target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch
 ===================================================================
---- target/linux/ramips/rt305x/config-3.7	(revision 35407)
-+++ target/linux/ramips/rt305x/config-3.7	(working copy)
-@@ -9,7 +9,7 @@
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
- CONFIG_CEVT_R4K=y
- CONFIG_CEVT_R4K_LIB=y
--CONFIG_CMDLINE="rootfstype=squashfs,jffs2"
-+CONFIG_CMDLINE="rootfstype=squashfs,jffs2 mem=16M"
- CONFIG_CMDLINE_BOOL=y
- # CONFIG_CMDLINE_OVERRIDE is not set
- CONFIG_CPU_GENERIC_DUMP_TLB=y
-@@ -24,9 +24,6 @@
- CONFIG_CPU_R4K_FPU=y
- CONFIG_CPU_SUPPORTS_32BIT_KERNEL=y
- CONFIG_CPU_SUPPORTS_HIGHMEM=y
--CONFIG_CRYPTO_AES=y
--CONFIG_CRYPTO_ALGAPI=y
--CONFIG_CRYPTO_ALGAPI2=y
- CONFIG_CSRC_R4K=y
- CONFIG_CSRC_R4K_LIB=y
- CONFIG_DECOMPRESS_LZMA=y
-@@ -102,8 +99,8 @@
- CONFIG_RALINK_RT305X=y
- # CONFIG_RALINK_RT3883 is not set
- CONFIG_RAMIPS_WDT=y
-+CONFIG_RT305X_MACH_3G300M=y
- CONFIG_RT305X_MACH_3G_6200N=y
--CONFIG_RT305X_MACH_3G300M=y
- CONFIG_RT305X_MACH_AIR3GII=y
- CONFIG_RT305X_MACH_ALL0256N=y
- CONFIG_RT305X_MACH_ALL5002=y
-@@ -118,8 +115,10 @@
- CONFIG_RT305X_MACH_F5D8235_V2=y
- CONFIG_RT305X_MACH_FONERA20N=y
- CONFIG_RT305X_MACH_FREESTATION5=y
-+CONFIG_RT305X_MACH_HLK_RM04=y
- CONFIG_RT305X_MACH_HW550_3G=y
- CONFIG_RT305X_MACH_MOFI3500_3GN=y
-+CONFIG_RT305X_MACH_MPR_A1=y
- CONFIG_RT305X_MACH_MZKW300NH2=y
- CONFIG_RT305X_MACH_NBG_419N=y
- CONFIG_RT305X_MACH_NW718=y
-Index: target/linux/ramips/base-files/etc/diag.sh
+--- target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
++++ target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
+@@ -0,0 +1,10 @@
++--- a/drivers/mtd/devices/m25p80.c
+++++ b/drivers/mtd/devices/m25p80.c
++@@ -682,6 +682,7 @@
++ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
++ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
++ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
+++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
++ 
++ 	/* Spansion -- single (large) sector size only, at least
++ 	 * for the chips listed here (without boot sectors).
+Index: package/mac80211/patches/630-rt2x00-support-rt5350.patch
 ===================================================================
---- target/linux/ramips/base-files/etc/diag.sh	(revision 35407)
-+++ target/linux/ramips/base-files/etc/diag.sh	(working copy)
-@@ -70,6 +70,12 @@
- 	mofi3500-3gn)
- 		status_led="mofi3500-3gn:green:status"
- 		;;
-+	mpr-a1)
-+		status_led="mpr-a1:red:power"
-+		;;
-+	hlk-rm04)
-+		status_led="hlk-rm04:red:power"
-+		;;
- 	nbg-419n)
- 		status_led="nbg-419n:green:power"
- 		;;
-Index: target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom
-===================================================================
---- target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(revision 35407)
-+++ target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(working copy)
-@@ -70,6 +70,8 @@
- 	freestation5 | \
- 	hw550-3g | \
- 	mofi3500-3gn | \
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	pwh2004 | \
- 	nbg-419n | \
- 	nw718 | \
-Index: target/linux/ramips/base-files/etc/uci-defaults/01_leds
-===================================================================
---- target/linux/ramips/base-files/etc/uci-defaults/01_leds	(revision 35407)
-+++ target/linux/ramips/base-files/etc/uci-defaults/01_leds	(working copy)
-@@ -78,6 +78,12 @@
- 	mzk-w300nh2)
- 		set_wifi_led "mzkw300nh2:amber:wlan"
- 		;;
-+	mpr-a1)
-+		set_wifi_led "mpr-a1:blue:system"
-+		;;
-+	hlk-rm04)
-+		set_wifi_led "hlk-rm04:blue:system"
-+		;;
- 	nw718)
- 		set_usb_led "nw718:amber:usb"
- 		;;
-Index: target/linux/ramips/base-files/etc/uci-defaults/02_network
-===================================================================
---- target/linux/ramips/base-files/etc/uci-defaults/02_network	(revision 35407)
-+++ target/linux/ramips/base-files/etc/uci-defaults/02_network	(working copy)
-@@ -156,6 +156,8 @@
- 	bc2 | \
- 	broadway | \
- 	f5d8235-v1 | \
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	mzk-w300nh2 | \
- 	nw718 | \
- 	psr-680w | \
-Index: target/linux/ramips/base-files/lib/ramips.sh
-===================================================================
---- target/linux/ramips/base-files/lib/ramips.sh	(revision 35407)
-+++ target/linux/ramips/base-files/lib/ramips.sh	(working copy)
-@@ -128,6 +128,12 @@
- 	*"MoFi Network MOFI3500-3GN")
- 		name="mofi3500-3gn"
- 		;;
-+	*"MPR-A1")
-+ 		name="mpr-a1"
-+ 		;;
-+	*"HLK-RM04")
-+ 		name="hlk-rm04"
-+ 		;;
- 	*"NBG-419N")
- 		name="nbg-419n"
- 		;;
-Index: target/linux/ramips/base-files/lib/upgrade/platform.sh
-===================================================================
---- target/linux/ramips/base-files/lib/upgrade/platform.sh	(revision 35407)
-+++ target/linux/ramips/base-files/lib/upgrade/platform.sh	(working copy)
-@@ -36,6 +36,8 @@
- 	freestation5 | \
- 	hw550-3g | \
- 	mofi3500-3gn | \
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	mzk-w300nh2 | \
- 	nbg-419n | \
- 	nw718 | \
-Index: target/linux/ramips/base-files/lib/preinit/06_set_iface_mac
-===================================================================
---- target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(revision 35407)
-+++ target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(working copy)
-@@ -21,6 +21,8 @@
- 	dir-620-a1 |\
- 	esr-9753 |\
- 	freestation5 |\
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	nw718 |\
- 	psr-680w |\
- 	rt-n56u |\
+--- package/mac80211/patches/630-rt2x00-support-rt5350.patch	(revision 0)
++++ package/mac80211/patches/630-rt2x00-support-rt5350.patch	(working copy)
+@@ -0,0 +1,438 @@
++--- a/drivers/net/wireless/rt2x00/rt2800.h
+++++ b/drivers/net/wireless/rt2x00/rt2800.h
++@@ -69,6 +69,7 @@
++ #define RF3322				0x000c
++ #define RF3053				0x000d
++ #define RF3290				0x3290
+++#define RF5350				0x5350
++ #define RF5360				0x5360
++ #define RF5370				0x5370
++ #define RF5372				0x5372
++--- a/drivers/net/wireless/rt2x00/rt2800lib.c
+++++ b/drivers/net/wireless/rt2x00/rt2800lib.c
++@@ -2138,6 +2138,15 @@
++ 	if (rf->channel <= 14) {
++ 		int idx = rf->channel-1;
++ 
+++		if (rt2x00_rt(rt2x00dev, RT5350)) {
+++			static const char r59_non_bt[] = {0x0b, 0x0b,
+++				0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0a,
+++				0x0a, 0x09, 0x08, 0x07, 0x07, 0x06};
+++
+++			rt2800_rfcsr_write(rt2x00dev, 59,
+++					   r59_non_bt[idx]);
+++		}
+++
++ 		if (test_bit(CAPABILITY_BT_COEXIST, &rt2x00dev->cap_flags)) {
++ 			if (rt2x00_rt_rev_gte(rt2x00dev, RT5390, REV_RT5390F)) {
++ 				/* r55/r59 value array of channel 1~14 */
++@@ -2219,6 +2228,7 @@
++ 	case RF3322:
++ 		rt2800_config_channel_rf3322(rt2x00dev, conf, rf, info);
++ 		break;
+++	case RF5350:
++ 	case RF5360:
++ 	case RF5370:
++ 	case RF5372:
++@@ -2232,6 +2242,7 @@
++ 
++ 	if (rt2x00_rf(rt2x00dev, RF3290) ||
++ 	    rt2x00_rf(rt2x00dev, RF3322) ||
+++	    rt2x00_rf(rt2x00dev, RF5350) ||
++ 	    rt2x00_rf(rt2x00dev, RF5360) ||
++ 	    rt2x00_rf(rt2x00dev, RF5370) ||
++ 	    rt2x00_rf(rt2x00dev, RF5372) ||
++@@ -2362,7 +2373,8 @@
++ 	/*
++ 	 * Clear update flag
++ 	 */
++-	if (rt2x00_rt(rt2x00dev, RT3352)) {
+++	if (rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350)) {
++ 		rt2800_bbp_read(rt2x00dev, 49, &bbp);
++ 		rt2x00_set_field8(&bbp, BBP49_UPDATE_FLAG, 0);
++ 		rt2800_bbp_write(rt2x00dev, 49, bbp);
++@@ -2801,6 +2813,7 @@
++ 		rt2800_rfcsr_write(rt2x00dev, 7, rfcsr);
++ 		break;
++ 	case RF3290:
+++	case RF5350:
++ 	case RF5360:
++ 	case RF5370:
++ 	case RF5372:
++@@ -3125,7 +3138,8 @@
++ 	} else if (rt2x00_rt(rt2x00dev, RT3572)) {
++ 		rt2800_register_write(rt2x00dev, TX_SW_CFG0, 0x00000400);
++ 		rt2800_register_write(rt2x00dev, TX_SW_CFG1, 0x00080606);
++-	} else if (rt2x00_rt(rt2x00dev, RT5390) ||
+++	} else if (rt2x00_rt(rt2x00dev, RT5350) ||
+++		   rt2x00_rt(rt2x00dev, RT5390) ||
++ 		   rt2x00_rt(rt2x00dev, RT5392)) {
++ 		rt2800_register_write(rt2x00dev, TX_SW_CFG0, 0x00000404);
++ 		rt2800_register_write(rt2x00dev, TX_SW_CFG1, 0x00080606);
++@@ -3507,6 +3521,10 @@
++ 		rt2800_bbp_write(rt2x00dev, 4, 0x50);
++ 	}
++ 
+++	if (rt2x00_rt(rt2x00dev, RT5350)) {
+++		rt2800_bbp_write(rt2x00dev, 4, 0x50);
+++	}
+++
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392)) {
++@@ -3519,11 +3537,13 @@
++ 	    rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT3352) ||
++ 	    rt2x00_rt(rt2x00dev, RT3572) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 31, 0x08);
++ 
++-	if (rt2x00_rt(rt2x00dev, RT3352))
+++	if (rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350))
++ 		rt2800_bbp_write(rt2x00dev, 47, 0x48);
++ 
++ 	rt2800_bbp_write(rt2x00dev, 65, 0x2c);
++@@ -3531,6 +3551,7 @@
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 68, 0x0b);
++@@ -3540,6 +3561,7 @@
++ 		rt2800_bbp_write(rt2x00dev, 73, 0x12);
++ 	} else if (rt2x00_rt(rt2x00dev, RT3290) ||
++ 		   rt2x00_rt(rt2x00dev, RT3352) ||
+++		   rt2x00_rt(rt2x00dev, RT5350) ||
++ 		   rt2x00_rt(rt2x00dev, RT5390) ||
++ 		   rt2x00_rt(rt2x00dev, RT5392)) {
++ 		rt2800_bbp_write(rt2x00dev, 69, 0x12);
++@@ -3576,7 +3598,8 @@
++ 		rt2800_bbp_write(rt2x00dev, 79, 0x18);
++ 		rt2800_bbp_write(rt2x00dev, 80, 0x09);
++ 		rt2800_bbp_write(rt2x00dev, 81, 0x33);
++-	} else if (rt2x00_rt(rt2x00dev, RT3352)) {
+++	} else if (rt2x00_rt(rt2x00dev, RT3352) ||
+++		rt2x00_rt(rt2x00dev, RT5350)) {
++ 		rt2800_bbp_write(rt2x00dev, 78, 0x0e);
++ 		rt2800_bbp_write(rt2x00dev, 80, 0x08);
++ 		rt2800_bbp_write(rt2x00dev, 81, 0x37);
++@@ -3586,6 +3609,7 @@
++ 
++ 	rt2800_bbp_write(rt2x00dev, 82, 0x62);
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 83, 0x7a);
++@@ -3595,6 +3619,7 @@
++ 	if (rt2x00_rt_rev(rt2x00dev, RT2860, REV_RT2860D))
++ 		rt2800_bbp_write(rt2x00dev, 84, 0x19);
++ 	else if (rt2x00_rt(rt2x00dev, RT3290) ||
+++		 rt2x00_rt(rt2x00dev, RT5350) ||
++ 		 rt2x00_rt(rt2x00dev, RT5390) ||
++ 		 rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 84, 0x9a);
++@@ -3603,6 +3628,7 @@
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 86, 0x38);
++@@ -3617,6 +3643,7 @@
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 92, 0x02);
++@@ -3635,6 +3662,7 @@
++ 	    rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT3352) ||
++ 	    rt2x00_rt(rt2x00dev, RT3572) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392) ||
++ 	    rt2800_is_305x_soc(rt2x00dev))
++@@ -3644,6 +3672,7 @@
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 104, 0x92);
++@@ -3654,13 +3683,15 @@
++ 		rt2800_bbp_write(rt2x00dev, 105, 0x1c);
++ 	else if (rt2x00_rt(rt2x00dev, RT3352))
++ 		rt2800_bbp_write(rt2x00dev, 105, 0x34);
++-	else if (rt2x00_rt(rt2x00dev, RT5390) ||
+++	else if (rt2x00_rt(rt2x00dev, RT5350) ||
+++		 rt2x00_rt(rt2x00dev, RT5390) ||
++ 		 rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 105, 0x3c);
++ 	else
++ 		rt2800_bbp_write(rt2x00dev, 105, 0x05);
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
+++		rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390))
++ 		rt2800_bbp_write(rt2x00dev, 106, 0x03);
++ 	else if (rt2x00_rt(rt2x00dev, RT3352))
++@@ -3670,11 +3701,13 @@
++ 	else
++ 		rt2800_bbp_write(rt2x00dev, 106, 0x35);
++ 
++-	if (rt2x00_rt(rt2x00dev, RT3352))
+++	if (rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350))
++ 		rt2800_bbp_write(rt2x00dev, 120, 0x50);
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
++ 	    rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392))
++ 		rt2800_bbp_write(rt2x00dev, 128, 0x12);
++@@ -3684,13 +3717,15 @@
++ 		rt2800_bbp_write(rt2x00dev, 135, 0xf6);
++ 	}
++ 
++-	if (rt2x00_rt(rt2x00dev, RT3352))
+++	if (rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350))
++ 		rt2800_bbp_write(rt2x00dev, 137, 0x0f);
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3071) ||
++ 	    rt2x00_rt(rt2x00dev, RT3090) ||
++ 	    rt2x00_rt(rt2x00dev, RT3390) ||
++ 	    rt2x00_rt(rt2x00dev, RT3572) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392)) {
++ 		rt2800_bbp_read(rt2x00dev, 138, &value);
++@@ -3727,7 +3762,8 @@
++ 		rt2800_bbp_write(rt2x00dev, 3, value);
++ 	}
++ 
++-	if (rt2x00_rt(rt2x00dev, RT3352)) {
+++	if (rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350)) {
++ 		rt2800_bbp_write(rt2x00dev, 163, 0xbd);
++ 		/* Set ITxBF timeout to 0x9c40=1000msec */
++ 		rt2800_bbp_write(rt2x00dev, 179, 0x02);
++@@ -3749,6 +3785,14 @@
++ 		rt2800_bbp_write(rt2x00dev, 148, 0xc8);
++ 	}
++ 
+++	if (rt2x00_rt(rt2x00dev, RT5350)) {
+++		rt2800_bbp_write(rt2x00dev, 150, 0x40); /* Antenna Software OFDM */
+++		rt2800_bbp_write(rt2x00dev, 151, 0x30); /* Antenna Software CCK */
+++		rt2800_bbp_write(rt2x00dev, 152, 0xa3);
+++		rt2800_bbp_write(rt2x00dev, 154, 0); /* Clear previously selected antenna */
+++	}
+++
+++
++ 	if (rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392)) {
++ 		int ant, div_mode;
++@@ -4143,6 +4187,78 @@
++ 	rt2800_rfcsr_write(rt2x00dev, 31, 0x10);
++ }
++ 
+++static void rt2800_init_rfcsr_5350(struct rt2x00_dev *rt2x00dev)
+++{
+++	struct rt2x00_platform_data *pdata = rt2x00dev->dev->platform_data;
+++
+++	rt2800_rfcsr_write(rt2x00dev, 0, 0xf0);
+++	rt2800_rfcsr_write(rt2x00dev, 1, 0x23);
+++	rt2800_rfcsr_write(rt2x00dev, 2, 0x50);
+++	rt2800_rfcsr_write(rt2x00dev, 3, 0x08);
+++	rt2800_rfcsr_write(rt2x00dev, 4, 0x49);
+++	rt2800_rfcsr_write(rt2x00dev, 5, 0x10);
+++	rt2800_rfcsr_write(rt2x00dev, 6, 0xe0);
+++	rt2800_rfcsr_write(rt2x00dev, 7, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 8, 0xf1);
+++	rt2800_rfcsr_write(rt2x00dev, 9, 0x02);
+++	rt2800_rfcsr_write(rt2x00dev, 10, 0x53);
+++	rt2800_rfcsr_write(rt2x00dev, 11, 0x4a);
+++	rt2800_rfcsr_write(rt2x00dev, 12, 0x46);
+++	if(pdata && pdata->clk_is_20mhz)
+++		rt2800_rfcsr_write(rt2x00dev, 13, 0x1f);/*if clk_is_20mhz - 0x1f else 0x9f*/
+++	else
+++		rt2800_rfcsr_write(rt2x00dev, 13, 0x9f);
+++	rt2800_rfcsr_write(rt2x00dev, 14, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 15, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 16, 0xc0);
+++	rt2800_rfcsr_write(rt2x00dev, 18, 0x03);
+++	rt2800_rfcsr_write(rt2x00dev, 19, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 20, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 21, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 22, 0x20);
+++	rt2800_rfcsr_write(rt2x00dev, 23, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 24, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 25, 0x80);
+++	rt2800_rfcsr_write(rt2x00dev, 26, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 27, 0x03);
+++	rt2800_rfcsr_write(rt2x00dev, 28, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 29, 0xd0);
+++	rt2800_rfcsr_write(rt2x00dev, 30, 0x10);
+++	rt2800_rfcsr_write(rt2x00dev, 31, 0x80);
+++	rt2800_rfcsr_write(rt2x00dev, 32, 0x80);
+++	rt2800_rfcsr_write(rt2x00dev, 33, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 34, 0x07);
+++	rt2800_rfcsr_write(rt2x00dev, 35, 0x12);
+++	rt2800_rfcsr_write(rt2x00dev, 36, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 37, 0x08);
+++	rt2800_rfcsr_write(rt2x00dev, 38, 0x85);
+++	rt2800_rfcsr_write(rt2x00dev, 39, 0x1b);
+++	rt2800_rfcsr_write(rt2x00dev, 40, 0x0b);
+++	rt2800_rfcsr_write(rt2x00dev, 41, 0xbb);
+++	rt2800_rfcsr_write(rt2x00dev, 42, 0xd5);
+++	rt2800_rfcsr_write(rt2x00dev, 43, 0x9b);
+++	rt2800_rfcsr_write(rt2x00dev, 44, 0x0c);
+++	rt2800_rfcsr_write(rt2x00dev, 45, 0xa6);
+++	rt2800_rfcsr_write(rt2x00dev, 46, 0x73);
+++	rt2800_rfcsr_write(rt2x00dev, 47, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 48, 0x10);
+++	rt2800_rfcsr_write(rt2x00dev, 49, 0x80);
+++	rt2800_rfcsr_write(rt2x00dev, 50, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 51, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 52, 0x38);
+++	rt2800_rfcsr_write(rt2x00dev, 53, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 54, 0x38);
+++	rt2800_rfcsr_write(rt2x00dev, 55, 0x43);
+++	rt2800_rfcsr_write(rt2x00dev, 56, 0x82);
+++	rt2800_rfcsr_write(rt2x00dev, 57, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 58, 0x39);
+++	rt2800_rfcsr_write(rt2x00dev, 59, 0x0b);
+++	rt2800_rfcsr_write(rt2x00dev, 60, 0x45);
+++	rt2800_rfcsr_write(rt2x00dev, 61, 0xd1);
+++	rt2800_rfcsr_write(rt2x00dev, 62, 0x00);
+++	rt2800_rfcsr_write(rt2x00dev, 63, 0x00);
+++}
+++
++ static void rt2800_init_rfcsr_5390(struct rt2x00_dev *rt2x00dev)
++ {
++ 	rt2800_rfcsr_write(rt2x00dev, 1, 0x0f);
++@@ -4305,6 +4421,7 @@
++ 	    !rt2x00_rt(rt2x00dev, RT3352) &&
++ 	    !rt2x00_rt(rt2x00dev, RT3390) &&
++ 	    !rt2x00_rt(rt2x00dev, RT3572) &&
+++	    !rt2x00_rt(rt2x00dev, RT5350) &&
++ 	    !rt2x00_rt(rt2x00dev, RT5390) &&
++ 	    !rt2x00_rt(rt2x00dev, RT5392) &&
++ 	    !rt2800_is_305x_soc(rt2x00dev))
++@@ -4315,6 +4432,8 @@
++ 	 */
++ 
++ 	if (rt2x00_rt(rt2x00dev, RT3290) ||
+++	    rt2x00_rt(rt2x00dev, RT3352) ||
+++	    rt2x00_rt(rt2x00dev, RT5350) ||
++ 	    rt2x00_rt(rt2x00dev, RT5390) ||
++ 	    rt2x00_rt(rt2x00dev, RT5392)) {
++ 		rt2800_rfcsr_read(rt2x00dev, 2, &rfcsr);
++@@ -4355,6 +4474,9 @@
++ 	case RT3572:
++ 		rt2800_init_rfcsr_3572(rt2x00dev);
++ 		break;
+++	case RT5350:
+++		rt2800_init_rfcsr_5350(rt2x00dev);
+++		break;
++ 	case RT5390:
++ 		rt2800_init_rfcsr_5390(rt2x00dev);
++ 		break;
++@@ -4751,6 +4873,12 @@
++ 		if (rt2x00_get_field16(word, EEPROM_NIC_CONF0_RXPATH) > 2)
++ 			rt2x00_set_field16(&word, EEPROM_NIC_CONF0_RXPATH, 2);
++ 		rt2x00_eeprom_write(rt2x00dev, EEPROM_NIC_CONF0, word);
+++	} else if(rt2x00_rt(rt2x00dev, RT5350)) {
+++		rt2x00_set_field16(&word, EEPROM_NIC_CONF0_RXPATH, 1);
+++		rt2x00_set_field16(&word, EEPROM_NIC_CONF0_TXPATH, 1);
+++		rt2x00_set_field16(&word, EEPROM_NIC_CONF0_RF_TYPE, RF3320);
+++		rt2x00_eeprom_write(rt2x00dev, EEPROM_NIC_CONF0, word);
+++		EEPROM(rt2x00dev, "rt5350: Ant: 0x%04x\n", word);
++ 	}
++ 
++ 	rt2x00_eeprom_read(rt2x00dev, EEPROM_NIC_CONF1, &word);
++@@ -4875,6 +5003,8 @@
++ 	    rt2x00_get_field32(reg, MAC_CSR0_CHIPSET) == RT5390 ||
++ 	    rt2x00_get_field32(reg, MAC_CSR0_CHIPSET) == RT5392)
++ 		rt2x00_eeprom_read(rt2x00dev, EEPROM_CHIP_ID, &value);
+++	else if(rt2x00_get_field32(reg, MAC_CSR0_CHIPSET) == RT5350)
+++		value = RF5350;
++ 	else
++ 		value = rt2x00_get_field16(eeprom, EEPROM_NIC_CONF0_RF_TYPE);
++ 
++@@ -4892,6 +5022,7 @@
++ 	case RT3352:
++ 	case RT3390:
++ 	case RT3572:
+++	case RT5350:
++ 	case RT5390:
++ 	case RT5392:
++ 		break;
++@@ -4913,6 +5044,7 @@
++ 	case RF3290:
++ 	case RF3320:
++ 	case RF3322:
+++	case RF5350:
++ 	case RF5360:
++ 	case RF5370:
++ 	case RF5372:
++@@ -5276,7 +5408,8 @@
++ 		   rt2x00_rf(rt2x00dev, RF5392)) {
++ 		spec->num_channels = 14;
++ 		spec->channels = rf_vals_3x;
++-	} else if (rt2x00_rf(rt2x00dev, RF3322)) {
+++	} else if (rt2x00_rf(rt2x00dev, RF3322) ||
+++		   rt2x00_rf(rt2x00dev, RF5350)) {
++ 		spec->num_channels = 14;
++ 		if (spec->clk_is_20mhz)
++ 			spec->channels = rf_vals_xtal20mhz_3x;
++@@ -5365,6 +5498,7 @@
++ 	case RF3290:
++ 	case RF5360:
++ 	case RF5370:
+++	case RF5350:
++ 	case RF5372:
++ 	case RF5390:
++ 	case RF5392:
++--- a/drivers/net/wireless/rt2x00/rt2800pci.c
+++++ b/drivers/net/wireless/rt2x00/rt2800pci.c
++@@ -171,7 +171,7 @@
++ #else
++ static inline int rt2800pci_read_eeprom_pci(struct rt2x00_dev *rt2x00dev)
++ {
++-	return -EOPNOTSUPP;
+++	return 0;
++ }
++ 
++ static inline int rt2800pci_efuse_detect(struct rt2x00_dev *rt2x00dev)
++@@ -181,7 +181,7 @@
++ 
++ static inline int rt2800pci_read_eeprom_efuse(struct rt2x00_dev *rt2x00dev)
++ {
++-	return -EOPNOTSUPP;
+++	return 0;
++ }
++ #endif /* CONFIG_PCI */
++ 
++--- a/drivers/net/wireless/rt2x00/rt2x00.h
+++++ b/drivers/net/wireless/rt2x00/rt2x00.h
++@@ -194,6 +194,7 @@
++ #define RT3572		0x3572
++ #define RT3593		0x3593
++ #define RT3883		0x3883	/* WSOC */
+++#define RT5350		0x5350  /* WSOC 2.4GHz */
++ #define RT5390		0x5390  /* 2.4GHz */
++ #define RT5392		0x5392  /* 2.4GHz */
++ 
