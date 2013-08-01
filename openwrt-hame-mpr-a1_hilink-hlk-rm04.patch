@@ -10,153 +10,51 @@ Index: feeds.conf.default
  #src-svn phone svn://svn.openwrt.org/openwrt/feeds/phone
  #src-svn efl svn://svn.openwrt.org/openwrt/feeds/efl
  #src-svn xorg svn://svn.openwrt.org/openwrt/feeds/xorg
-Index: target/linux/ramips/rt305x/profiles/hame.mk
+Index: target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch
 ===================================================================
---- target/linux/ramips/rt305x/profiles/hame.mk	(revision 0)
-+++ target/linux/ramips/rt305x/profiles/hame.mk	(working copy)
-@@ -0,0 +1,17 @@
-+#
-+# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
-+#
-+# This is free software, licensed under the GNU General Public License v2.
-+# See /LICENSE for more information.
-+#
-+
-+define Profile/MPR_A1
-+	NAME:=HAME MPR-A1
-+	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
-+endef
-+
-+define Profile/MPR_A1/Description
-+	Package set for HAME MPR-A1 board
-+endef
-+
-+$(eval $(call Profile,MPR_A1))
-Index: target/linux/ramips/rt305x/profiles/hilink.mk
+--- target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
++++ target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
+@@ -0,0 +1,10 @@
++--- a/drivers/mtd/devices/m25p80.c
+++++ b/drivers/mtd/devices/m25p80.c
++@@ -682,6 +682,7 @@
++ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
++ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
++ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
+++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
++ 
++ 	/* Spansion -- single (large) sector size only, at least
++ 	 * for the chips listed here (without boot sectors).
+Index: target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch
 ===================================================================
---- target/linux/ramips/rt305x/profiles/hilink.mk	(revision 0)
-+++ target/linux/ramips/rt305x/profiles/hilink.mk	(working copy)
-@@ -0,0 +1,17 @@
-+#
-+# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
-+#
-+# This is free software, licensed under the GNU General Public License v2.
-+# See /LICENSE for more information.
-+#
-+
-+define Profile/HLK_RM04
-+	NAME:=HILINK HLK-RM04
-+	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
-+endef
-+
-+define Profile/HLK_RM04/Description
-+	Package set for HILINK HLK-RM04 board
-+endef
-+
-+$(eval $(call Profile,HLK_RM04))
-Index: target/linux/ramips/base-files/lib/upgrade/platform.sh
+--- target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
++++ target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
+@@ -0,0 +1,10 @@
++--- a/drivers/mtd/devices/m25p80.c
+++++ b/drivers/mtd/devices/m25p80.c
++@@ -682,6 +682,7 @@
++ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
++ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
++ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
+++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
++ 
++ 	/* Spansion -- single (large) sector size only, at least
++ 	 * for the chips listed here (without boot sectors).
+Index: target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch
 ===================================================================
---- target/linux/ramips/base-files/lib/upgrade/platform.sh	(revision 35407)
-+++ target/linux/ramips/base-files/lib/upgrade/platform.sh	(working copy)
-@@ -36,6 +36,8 @@
- 	freestation5 | \
- 	hw550-3g | \
- 	mofi3500-3gn | \
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	mzk-w300nh2 | \
- 	nbg-419n | \
- 	nw718 | \
-Index: target/linux/ramips/base-files/lib/preinit/06_set_iface_mac
-===================================================================
---- target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(revision 35407)
-+++ target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(working copy)
-@@ -21,6 +21,8 @@
- 	dir-620-a1 |\
- 	esr-9753 |\
- 	freestation5 |\
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	nw718 |\
- 	psr-680w |\
- 	rt-n56u |\
-Index: target/linux/ramips/base-files/lib/ramips.sh
-===================================================================
---- target/linux/ramips/base-files/lib/ramips.sh	(revision 35407)
-+++ target/linux/ramips/base-files/lib/ramips.sh	(working copy)
-@@ -128,6 +128,12 @@
- 	*"MoFi Network MOFI3500-3GN")
- 		name="mofi3500-3gn"
- 		;;
-+	*"MPR-A1")
-+ 		name="mpr-a1"
-+ 		;;
-+	*"HLK-RM04")
-+ 		name="hlk-rm04"
-+ 		;;
- 	*"NBG-419N")
- 		name="nbg-419n"
- 		;;
-Index: target/linux/ramips/base-files/etc/diag.sh
-===================================================================
---- target/linux/ramips/base-files/etc/diag.sh	(revision 35407)
-+++ target/linux/ramips/base-files/etc/diag.sh	(working copy)
-@@ -70,6 +70,12 @@
- 	mofi3500-3gn)
- 		status_led="mofi3500-3gn:green:status"
- 		;;
-+	mpr-a1)
-+		status_led="mpr-a1:red:power"
-+		;;
-+	hlk-rm04)
-+		status_led="hlk-rm04:red:power"
-+		;;
- 	nbg-419n)
- 		status_led="nbg-419n:green:power"
- 		;;
-Index: target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom
-===================================================================
---- target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(revision 35407)
-+++ target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(working copy)
-@@ -70,6 +70,8 @@
- 	freestation5 | \
- 	hw550-3g | \
- 	mofi3500-3gn | \
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	pwh2004 | \
- 	nbg-419n | \
- 	nw718 | \
-Index: target/linux/ramips/base-files/etc/uci-defaults/01_leds
-===================================================================
---- target/linux/ramips/base-files/etc/uci-defaults/01_leds	(revision 35407)
-+++ target/linux/ramips/base-files/etc/uci-defaults/01_leds	(working copy)
-@@ -78,6 +78,12 @@
- 	mzk-w300nh2)
- 		set_wifi_led "mzkw300nh2:amber:wlan"
- 		;;
-+	mpr-a1)
-+		set_wifi_led "mpr-a1:blue:system"
-+		;;
-+	hlk-rm04)
-+		set_wifi_led "hlk-rm04:blue:system"
-+		;;
- 	nw718)
- 		set_usb_led "nw718:amber:usb"
- 		;;
-Index: target/linux/ramips/base-files/etc/uci-defaults/02_network
-===================================================================
---- target/linux/ramips/base-files/etc/uci-defaults/02_network	(revision 35407)
-+++ target/linux/ramips/base-files/etc/uci-defaults/02_network	(working copy)
-@@ -156,6 +156,8 @@
- 	bc2 | \
- 	broadway | \
- 	f5d8235-v1 | \
-+	mpr-a1 | \
-+	hlk-rm04 | \
- 	mzk-w300nh2 | \
- 	nw718 | \
- 	psr-680w | \
+--- target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
++++ target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
+@@ -0,0 +1,10 @@
++--- a/drivers/mtd/devices/m25p80.c
+++++ b/drivers/mtd/devices/m25p80.c
++@@ -682,6 +682,7 @@
++ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
++ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
++ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
+++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
++ 
++ 	/* Spansion -- single (large) sector size only, at least
++ 	 * for the chips listed here (without boot sectors).
 Index: target/linux/ramips/image/Makefile
 ===================================================================
 --- target/linux/ramips/image/Makefile	(revision 35407)
@@ -185,6 +83,122 @@ Index: target/linux/ramips/image/Makefile
  	$(call Image/Build/Profile/MZKW3000NH2,$(1))
  	$(call Image/Build/Profile/NBG419N,$(1))
  	$(call Image/Build/Profile/NW718,$(1))
+Index: target/linux/ramips/files/arch/mips/ralink/rt305x/mach-hlk-rm04.c
+===================================================================
+--- target/linux/ramips/files/arch/mips/ralink/rt305x/mach-hlk-rm04.c	(revision 0)
++++ target/linux/ramips/files/arch/mips/ralink/rt305x/mach-hlk-rm04.c	(working copy)
+@@ -0,0 +1,111 @@
++/*
++ *  HAME MPR-A1 board support by Michel Stempin <michel.stempin@wanadoo.fr>
++ *  Based on previous work by arpunk, arteq, Heffer & p1vo from OpenWrt forum.
++ * 
++ *
++ *  This program is free software; you can redistribute it and/or modify it
++ *  under the terms of the GNU General Public License version 2 as published
++ *  by the Free Software Foundation.
++ */
++
++#include <linux/init.h>
++#include <linux/platform_device.h>
++#include <linux/spi/spi.h>
++#include <linux/spi/flash.h>
++#include <linux/gpio.h>
++
++#include <asm/mach-ralink/machine.h>
++#include <asm/mach-ralink/dev-gpio-buttons.h>
++#include <asm/mach-ralink/dev-gpio-leds.h>
++#include <asm/mach-ralink/rt305x.h>
++#include <asm/mach-ralink/rt305x_regs.h>
++
++#include "devices.h"
++
++#define HLK_RM04_GPIO_BUTTON_RESET	0
++#define HLK_RM04_GPIO_USB_POWER		7
++#define HLK_RM04_GPIO_ROOT_HUB_POWER	12
++#define HLK_RM04_GPIO_LED_POWER		17
++#define HLK_RM04_GPIO_LED_SYSTEM	20
++
++#define HLK_RM04_KEYS_POLL_INTERVAL	20
++#define HLK_RM04_KEYS_DEBOUNCE_INTERVAL	(3 * HLK_RM04_KEYS_POLL_INTERVAL)
++
++const struct flash_platform_data hlk_rm04_flash = {
++        .type           = "pm25lq032",
++};
++
++struct spi_board_info hlk_rm04_spi_slave_info[] __initdata = {
++        {
++                .modalias       = "m25p80",
++                .platform_data  = &hlk_rm04_flash,
++                .irq            = -1,
++                .max_speed_hz   = 10000000,
++                .bus_num        = 0,
++                .chip_select    = 0,
++        }
++};
++
++static struct gpio_led hlk_rm04_leds_gpio[] __initdata = {
++        {
++                .name           = "hlk-rm04:blue:system",
++                .gpio           = HLK_RM04_GPIO_LED_SYSTEM,
++                .active_low     = 1,
++        },
++        {
++                .name           = "hlk-rm04:red:power",
++                .gpio           = HLK_RM04_GPIO_LED_POWER,
++                .active_low     = 1,
++                .default_state  = LEDS_GPIO_DEFSTATE_ON,
++        }
++};
++
++static struct gpio_keys_button hlk_rm04_gpio_buttons[] __initdata = {
++        {
++                .desc           = "reset",
++                .type           = EV_KEY,
++                .code           = KEY_RESTART,
++                .debounce_interval = HLK_RM04_KEYS_DEBOUNCE_INTERVAL,
++                .gpio           = HLK_RM04_GPIO_BUTTON_RESET,
++                .active_low     = 1,
++        }
++};
++
++static void __init hlk_rm04_init(void)
++{
++        // JTAG is required for LED control
++//        rt305x_gpio_init((RT305X_GPIO_MODE_GPIO <<
++//                          RT305X_GPIO_MODE_UART0_SHIFT) |
++//                         RT305X_GPIO_MODE_JTAG);
++	
++	rt305x_gpio_init(RT305X_GPIO_MODE_JTAG);
++
++        rt305x_register_spi(hlk_rm04_spi_slave_info,
++                            ARRAY_SIZE(hlk_rm04_spi_slave_info));
++
++//        ramips_register_gpio_leds(-1, ARRAY_SIZE(hlk_rm04_leds_gpio),
++//                                  hlk_rm04_leds_gpio);
++
++        ramips_register_gpio_buttons(-1, HLK_RM04_KEYS_POLL_INTERVAL,
++                                     ARRAY_SIZE(hlk_rm04_gpio_buttons),
++                                     hlk_rm04_gpio_buttons);
++
++        rt305x_esw_data.vlan_config = RT305X_ESW_VLAN_CONFIG_LLLLW;
++        rt305x_register_ethernet();
++
++        rt305x_register_wifi();
++
++        rt305x_register_wdt();
++/*
++        gpio_request_one(HLK_RM04_GPIO_USB_POWER,
++                         GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
++                         "USB power");
++        gpio_request_one(HLK_RM04_GPIO_ROOT_HUB_POWER,
++                         GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
++                         "USB root hub power");
++*/
++        rt305x_register_usb();
++}
++
++MIPS_MACHINE(RAMIPS_MACH_HLK_RM04, "HLK-RM04", "HILINK HLK-RM04",
++             hlk_rm04_init);
 Index: target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile
 ===================================================================
 --- target/linux/ramips/files/arch/mips/ralink/rt305x/Makefile	(revision 35407)
@@ -333,122 +347,6 @@ Index: target/linux/ramips/files/arch/mips/ralink/rt305x/mach-mpr-a1.c
 +
 +MIPS_MACHINE(RAMIPS_MACH_MPR_A1, "MPR-A1", "HAME MPR-A1",
 +             mpr_a1_init);
-Index: target/linux/ramips/files/arch/mips/ralink/rt305x/mach-hlk-rm04.c
-===================================================================
---- target/linux/ramips/files/arch/mips/ralink/rt305x/mach-hlk-rm04.c	(revision 0)
-+++ target/linux/ramips/files/arch/mips/ralink/rt305x/mach-hlk-rm04.c	(working copy)
-@@ -0,0 +1,111 @@
-+/*
-+ *  HAME MPR-A1 board support by Michel Stempin <michel.stempin@wanadoo.fr>
-+ *  Based on previous work by arpunk, arteq, Heffer & p1vo from OpenWrt forum.
-+ * 
-+ *
-+ *  This program is free software; you can redistribute it and/or modify it
-+ *  under the terms of the GNU General Public License version 2 as published
-+ *  by the Free Software Foundation.
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/platform_device.h>
-+#include <linux/spi/spi.h>
-+#include <linux/spi/flash.h>
-+#include <linux/gpio.h>
-+
-+#include <asm/mach-ralink/machine.h>
-+#include <asm/mach-ralink/dev-gpio-buttons.h>
-+#include <asm/mach-ralink/dev-gpio-leds.h>
-+#include <asm/mach-ralink/rt305x.h>
-+#include <asm/mach-ralink/rt305x_regs.h>
-+
-+#include "devices.h"
-+
-+#define HLK_RM04_GPIO_BUTTON_RESET	0
-+#define HLK_RM04_GPIO_USB_POWER		7
-+#define HLK_RM04_GPIO_ROOT_HUB_POWER	12
-+#define HLK_RM04_GPIO_LED_POWER		17
-+#define HLK_RM04_GPIO_LED_SYSTEM	20
-+
-+#define HLK_RM04_KEYS_POLL_INTERVAL	20
-+#define HLK_RM04_KEYS_DEBOUNCE_INTERVAL	(3 * HLK_RM04_KEYS_POLL_INTERVAL)
-+
-+const struct flash_platform_data hlk_rm04_flash = {
-+        .type           = "pm25lq032",
-+};
-+
-+struct spi_board_info hlk_rm04_spi_slave_info[] __initdata = {
-+        {
-+                .modalias       = "m25p80",
-+                .platform_data  = &hlk_rm04_flash,
-+                .irq            = -1,
-+                .max_speed_hz   = 10000000,
-+                .bus_num        = 0,
-+                .chip_select    = 0,
-+        }
-+};
-+
-+static struct gpio_led hlk_rm04_leds_gpio[] __initdata = {
-+        {
-+                .name           = "hlk-rm04:blue:system",
-+                .gpio           = HLK_RM04_GPIO_LED_SYSTEM,
-+                .active_low     = 1,
-+        },
-+        {
-+                .name           = "hlk-rm04:red:power",
-+                .gpio           = HLK_RM04_GPIO_LED_POWER,
-+                .active_low     = 1,
-+                .default_state  = LEDS_GPIO_DEFSTATE_ON,
-+        }
-+};
-+
-+static struct gpio_keys_button hlk_rm04_gpio_buttons[] __initdata = {
-+        {
-+                .desc           = "reset",
-+                .type           = EV_KEY,
-+                .code           = KEY_RESTART,
-+                .debounce_interval = HLK_RM04_KEYS_DEBOUNCE_INTERVAL,
-+                .gpio           = HLK_RM04_GPIO_BUTTON_RESET,
-+                .active_low     = 1,
-+        }
-+};
-+
-+static void __init hlk_rm04_init(void)
-+{
-+        // JTAG is required for LED control
-+//        rt305x_gpio_init((RT305X_GPIO_MODE_GPIO <<
-+//                          RT305X_GPIO_MODE_UART0_SHIFT) |
-+//                         RT305X_GPIO_MODE_JTAG);
-+	
-+	rt305x_gpio_init(RT305X_GPIO_MODE_JTAG);
-+
-+        rt305x_register_spi(hlk_rm04_spi_slave_info,
-+                            ARRAY_SIZE(hlk_rm04_spi_slave_info));
-+
-+//        ramips_register_gpio_leds(-1, ARRAY_SIZE(hlk_rm04_leds_gpio),
-+//                                  hlk_rm04_leds_gpio);
-+
-+        ramips_register_gpio_buttons(-1, HLK_RM04_KEYS_POLL_INTERVAL,
-+                                     ARRAY_SIZE(hlk_rm04_gpio_buttons),
-+                                     hlk_rm04_gpio_buttons);
-+
-+        rt305x_esw_data.vlan_config = RT305X_ESW_VLAN_CONFIG_LLLLW;
-+        rt305x_register_ethernet();
-+
-+        rt305x_register_wifi();
-+
-+        rt305x_register_wdt();
-+/*
-+        gpio_request_one(HLK_RM04_GPIO_USB_POWER,
-+                         GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
-+                         "USB power");
-+        gpio_request_one(HLK_RM04_GPIO_ROOT_HUB_POWER,
-+                         GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
-+                         "USB root hub power");
-+*/
-+        rt305x_register_usb();
-+}
-+
-+MIPS_MACHINE(RAMIPS_MACH_HLK_RM04, "HLK-RM04", "HILINK HLK-RM04",
-+             hlk_rm04_init);
 Index: target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h
 ===================================================================
 --- target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h	(revision 35407)
@@ -460,51 +358,197 @@ Index: target/linux/ramips/files/arch/mips/include/asm/mach-ralink/machine.h
 +	RAMIPS_MACH_MPR_A1,		/* HAME MPR-A1 */
 +	RAMIPS_MACH_HLK_RM04,		/* HILINK HLK-RM04*/
  };
-Index: target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch
+Index: target/linux/ramips/rt305x/config-3.7
 ===================================================================
---- target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
-+++ target/linux/generic/patches-3.6/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
-@@ -0,0 +1,10 @@
-+--- a/drivers/mtd/devices/m25p80.c
-++++ b/drivers/mtd/devices/m25p80.c
-+@@ -682,6 +682,7 @@
-+ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
-+ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
-+ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
-++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
-+ 
-+ 	/* Spansion -- single (large) sector size only, at least
-+ 	 * for the chips listed here (without boot sectors).
-Index: target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch
+--- target/linux/ramips/rt305x/config-3.7	(revision 35407)
++++ target/linux/ramips/rt305x/config-3.7	(working copy)
+@@ -9,7 +9,7 @@
+ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+ CONFIG_CEVT_R4K=y
+ CONFIG_CEVT_R4K_LIB=y
+-CONFIG_CMDLINE="rootfstype=squashfs,jffs2"
++CONFIG_CMDLINE="rootfstype=squashfs,jffs2 mem=16M"
+ CONFIG_CMDLINE_BOOL=y
+ # CONFIG_CMDLINE_OVERRIDE is not set
+ CONFIG_CPU_GENERIC_DUMP_TLB=y
+@@ -24,9 +24,6 @@
+ CONFIG_CPU_R4K_FPU=y
+ CONFIG_CPU_SUPPORTS_32BIT_KERNEL=y
+ CONFIG_CPU_SUPPORTS_HIGHMEM=y
+-CONFIG_CRYPTO_AES=y
+-CONFIG_CRYPTO_ALGAPI=y
+-CONFIG_CRYPTO_ALGAPI2=y
+ CONFIG_CSRC_R4K=y
+ CONFIG_CSRC_R4K_LIB=y
+ CONFIG_DECOMPRESS_LZMA=y
+@@ -102,8 +99,8 @@
+ CONFIG_RALINK_RT305X=y
+ # CONFIG_RALINK_RT3883 is not set
+ CONFIG_RAMIPS_WDT=y
++CONFIG_RT305X_MACH_3G300M=y
+ CONFIG_RT305X_MACH_3G_6200N=y
+-CONFIG_RT305X_MACH_3G300M=y
+ CONFIG_RT305X_MACH_AIR3GII=y
+ CONFIG_RT305X_MACH_ALL0256N=y
+ CONFIG_RT305X_MACH_ALL5002=y
+@@ -118,8 +115,10 @@
+ CONFIG_RT305X_MACH_F5D8235_V2=y
+ CONFIG_RT305X_MACH_FONERA20N=y
+ CONFIG_RT305X_MACH_FREESTATION5=y
++CONFIG_RT305X_MACH_HLK_RM04=y
+ CONFIG_RT305X_MACH_HW550_3G=y
+ CONFIG_RT305X_MACH_MOFI3500_3GN=y
++CONFIG_RT305X_MACH_MPR_A1=y
+ CONFIG_RT305X_MACH_MZKW300NH2=y
+ CONFIG_RT305X_MACH_NBG_419N=y
+ CONFIG_RT305X_MACH_NW718=y
+Index: target/linux/ramips/rt305x/profiles/hame.mk
 ===================================================================
---- target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
-+++ target/linux/generic/patches-3.7/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
-@@ -0,0 +1,10 @@
-+--- a/drivers/mtd/devices/m25p80.c
-++++ b/drivers/mtd/devices/m25p80.c
-+@@ -682,6 +682,7 @@
-+ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
-+ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
-+ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
-++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
-+ 
-+ 	/* Spansion -- single (large) sector size only, at least
-+ 	 * for the chips listed here (without boot sectors).
-Index: target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch
+--- target/linux/ramips/rt305x/profiles/hame.mk	(revision 0)
++++ target/linux/ramips/rt305x/profiles/hame.mk	(working copy)
+@@ -0,0 +1,17 @@
++#
++# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
++#
++# This is free software, licensed under the GNU General Public License v2.
++# See /LICENSE for more information.
++#
++
++define Profile/MPR_A1
++	NAME:=HAME MPR-A1
++	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
++endef
++
++define Profile/MPR_A1/Description
++	Package set for HAME MPR-A1 board
++endef
++
++$(eval $(call Profile,MPR_A1))
+Index: target/linux/ramips/rt305x/profiles/hilink.mk
 ===================================================================
---- target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch	(revision 0)
-+++ target/linux/generic/patches-3.8/474-mtd_mp25p80_add_pm25lq032.patch	(working copy)
-@@ -0,0 +1,10 @@
-+--- a/drivers/mtd/devices/m25p80.c
-++++ b/drivers/mtd/devices/m25p80.c
-+@@ -682,6 +682,7 @@
-+ 	/* PMC -- pm25x "blocks" are 32K, sectors are 4K */
-+ 	{ "pm25lv512", INFO(0, 0, 32 * 1024, 2, SECT_4K_PMC) },
-+ 	{ "pm25lv010", INFO(0, 0, 32 * 1024, 4, SECT_4K_PMC) },
-++	{ "pm25lq032", INFO(0x7F9D46, 0, 64 * 1024,  64, SECT_4K) },
-+ 
-+ 	/* Spansion -- single (large) sector size only, at least
-+ 	 * for the chips listed here (without boot sectors).
+--- target/linux/ramips/rt305x/profiles/hilink.mk	(revision 0)
++++ target/linux/ramips/rt305x/profiles/hilink.mk	(working copy)
+@@ -0,0 +1,17 @@
++#
++# Copyright (C) 2012 Michel Stempin <michel.stempin@wanadoo.fr>
++#
++# This is free software, licensed under the GNU General Public License v2.
++# See /LICENSE for more information.
++#
++
++define Profile/HLK_RM04
++	NAME:=HILINK HLK-RM04
++	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-netdev kmod-ledtrig-timer
++endef
++
++define Profile/HLK_RM04/Description
++	Package set for HILINK HLK-RM04 board
++endef
++
++$(eval $(call Profile,HLK_RM04))
+Index: target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom
+===================================================================
+--- target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(revision 35407)
++++ target/linux/ramips/base-files/etc/hotplug.d/firmware/10-rt2x00-eeprom	(working copy)
+@@ -70,6 +70,8 @@
+ 	freestation5 | \
+ 	hw550-3g | \
+ 	mofi3500-3gn | \
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	pwh2004 | \
+ 	nbg-419n | \
+ 	nw718 | \
+Index: target/linux/ramips/base-files/etc/uci-defaults/02_network
+===================================================================
+--- target/linux/ramips/base-files/etc/uci-defaults/02_network	(revision 35407)
++++ target/linux/ramips/base-files/etc/uci-defaults/02_network	(working copy)
+@@ -156,6 +156,8 @@
+ 	bc2 | \
+ 	broadway | \
+ 	f5d8235-v1 | \
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	mzk-w300nh2 | \
+ 	nw718 | \
+ 	psr-680w | \
+Index: target/linux/ramips/base-files/etc/uci-defaults/01_leds
+===================================================================
+--- target/linux/ramips/base-files/etc/uci-defaults/01_leds	(revision 35407)
++++ target/linux/ramips/base-files/etc/uci-defaults/01_leds	(working copy)
+@@ -78,6 +78,12 @@
+ 	mzk-w300nh2)
+ 		set_wifi_led "mzkw300nh2:amber:wlan"
+ 		;;
++	mpr-a1)
++		set_wifi_led "mpr-a1:blue:system"
++		;;
++	hlk-rm04)
++		set_wifi_led "hlk-rm04:blue:system"
++		;;
+ 	nw718)
+ 		set_usb_led "nw718:amber:usb"
+ 		;;
+Index: target/linux/ramips/base-files/etc/diag.sh
+===================================================================
+--- target/linux/ramips/base-files/etc/diag.sh	(revision 35407)
++++ target/linux/ramips/base-files/etc/diag.sh	(working copy)
+@@ -70,6 +70,12 @@
+ 	mofi3500-3gn)
+ 		status_led="mofi3500-3gn:green:status"
+ 		;;
++	mpr-a1)
++		status_led="mpr-a1:red:power"
++		;;
++	hlk-rm04)
++		status_led="hlk-rm04:red:power"
++		;;
+ 	nbg-419n)
+ 		status_led="nbg-419n:green:power"
+ 		;;
+Index: target/linux/ramips/base-files/lib/ramips.sh
+===================================================================
+--- target/linux/ramips/base-files/lib/ramips.sh	(revision 35407)
++++ target/linux/ramips/base-files/lib/ramips.sh	(working copy)
+@@ -128,6 +128,12 @@
+ 	*"MoFi Network MOFI3500-3GN")
+ 		name="mofi3500-3gn"
+ 		;;
++	*"MPR-A1")
++ 		name="mpr-a1"
++ 		;;
++	*"HLK-RM04")
++ 		name="hlk-rm04"
++ 		;;
+ 	*"NBG-419N")
+ 		name="nbg-419n"
+ 		;;
+Index: target/linux/ramips/base-files/lib/upgrade/platform.sh
+===================================================================
+--- target/linux/ramips/base-files/lib/upgrade/platform.sh	(revision 35407)
++++ target/linux/ramips/base-files/lib/upgrade/platform.sh	(working copy)
+@@ -36,6 +36,8 @@
+ 	freestation5 | \
+ 	hw550-3g | \
+ 	mofi3500-3gn | \
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	mzk-w300nh2 | \
+ 	nbg-419n | \
+ 	nw718 | \
+Index: target/linux/ramips/base-files/lib/preinit/06_set_iface_mac
+===================================================================
+--- target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(revision 35407)
++++ target/linux/ramips/base-files/lib/preinit/06_set_iface_mac	(working copy)
+@@ -21,6 +21,8 @@
+ 	dir-620-a1 |\
+ 	esr-9753 |\
+ 	freestation5 |\
++	mpr-a1 | \
++	hlk-rm04 | \
+ 	nw718 |\
+ 	psr-680w |\
+ 	rt-n56u |\
 Index: package/mac80211/patches/630-rt2x00-support-rt5350.patch
 ===================================================================
 --- package/mac80211/patches/630-rt2x00-support-rt5350.patch	(revision 0)
