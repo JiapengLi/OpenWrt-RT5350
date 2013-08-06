@@ -34,7 +34,7 @@ uboot128.img - (RT5350 16M RAM Uboot，support 16M SDRAM)
 hame-mpr-a1-v22-uboot128.bin - （HAME Uboot support 16MRAM, divide from hame-mpr-a1-v22.bin） 
 
 
-### SDRAM
+## SDRAM
 
 If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SDRAM to 32M, here is some available 32M SDRAM chips.
 
@@ -43,26 +43,26 @@ If you want to run LUCI on HLK-RM04 or MPR-A1, you may want to expand the 16M SD
 	ESMT          32M     M12L2561616A
 	Samsung  	  32M     K4S561632E
 
-### RESOURCE
+## RESOURCE
 
-#### WIKI
+### WIKI
 [Hame MPR-A1](http://wiki.openwrt.org/toh/hame/mpr-a1)
 
 [HiLink HLK-RM04](http://wiki.openwrt.org/toh/hilink/hlk-rm04)
 
-#### Forum
+### Forum
 [Hi-Link wireless module HLK-RM04](https://forum.openwrt.org/viewtopic.php?id=42142)
 
 [HAME MPR-A1 - Small and cheap router with built-in battery](https://forum.openwrt.org/viewtopic.php?id=37002)
 
-#### OTHERS
+### OTHERS
 [Squonk42's RT5350](https://github.com/Squonk42/OpenWrt-RT5350?source=cc)
 
 ## PATCH for HLK-RM04
 This patch is based on [Squonk42's RT5350 Patch](https://github.com/Squonk42/OpenWrt-RT5350?source=cc), include **HiLink HLK-RM04** and **Hame MPR-A1**, and also it doesn't support the current trunk version, only test with version 35407.  
 Patch include mpr-a1, hlk-rm04, flash and wlan.  
 Now you only need this one patch to compile openwrt for hlk-rm04.  
-**Note: this patch is a temporary solution, the dts structure patch for hlk-rm04 is on the way, when the serial bug(about uartf) is fixed, i'll publise it here.**
+**Note: this patch is a temporary solution, the dts structure patch for hlk-rm04 is on the way, when the serial bug(about uartf) is fixed, i'll publish it here.**
 
 Usage:  
 
