@@ -83,7 +83,29 @@ If you can't see hlk-rm04 option, please try to clear `tmp` folder, and `make me
 Contact me if you need help.[gapleehit@gmail.com](mailto:gapleehit@gmail.com)
 
 ## How To
-####Possible way to flash MPR-A1 (without using serial)####
+
+###Universal way to upgrade Hame-MPR-Ax (*By Alexander*)
+
+1. download wireshark from here and install it <http://www.wireshark.org/download>.
+2. download tftpd32 from here <http://tftpd32.jounin.net/tftpd32_download.html>.
+3. download openwrt firmware from here <https://github.com/JiapengLi/OpenWrt-RT5350/tree/master/mpr-a1> - choose own firmware:
+
+		  a) - mpr-a1-16m-luci-usb-mjpg.bin - (openwrt firmware,16M RAM) 
+		  b) - mpr-a1-32m-luci-usb-mjpg.bin - (openwrt firmware,32M RAM) 
+
+Next we need to understand how hame respond on network.
+
+1. Run wireshark and connect router to USB. If router was bricked we didn't see any packets from it. Disconnect usb from router. 
+2. Do not close wireshark, push reset button and connect usb wire (led must become blue) . In wireshark we see this infromation:
+***Hame send ARP request from address 192.168.1.2 and try to know how got ip address 192.168.1.55 we saw what packets repeat. Change ip address of computer to 192.168.1.55 netmask 255.255.255.0.***  
+Now we see request from Hame to download via tftpd file with name: 9c417c75a478. 
+3. create firmware folder on desktop, move owr firmware to new folder
+4. rename firmware name to: 9c417c75a478.
+5. run tftpd and choose firmware folder.
+After that we saw  what firmware downloaded to Hame. It will be restarted automatically.  
+**New router address: 192.168.1.1.**
+
+###Possible way to flash MPR-A1 (without using serial)####
 Use the tools(for Windows) in **tools/Hame** to upgrade Hame. 
 
 **BE CAREFUL,THESE PROCEDURE IS NOT TESTED.**
